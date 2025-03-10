@@ -384,19 +384,19 @@ const App = () => {
     <div className="relative w-full h-screen overflow-hidden bg-gray-900">
       {/* Video container with proper centering */}
       <div className="absolute inset-0 flex items-center justify-center bg-black">
-        <video
-          id="mainVideo"
-          className="absolute w-full h-full object-contain max-w-full max-h-full"
-          src={videoSrc}
-          autoPlay
-          // muted
-          // loop
-          // controls
-        />
+      <video
+        id="mainVideo"
+        className="absolute w-full h-full object-contain max-w-full max-h-full"
+        src={videoSrc}
+        autoPlay
+        // muted
+        controls = {videoSrc === "/src/videos/hdfc.mp4"} 
+/>
+
       </div>
 
       {/* Gradient overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-black/30 pointer-events-none hidden"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-black/30 pointer-events-none"></div>
 
       {/* Header
       <div className="absolute top-0 left-0 w-full p-4 bg-blue-600 bg-opacity-80 text-white z-20">
@@ -461,7 +461,7 @@ const App = () => {
             Quiz Successfully Completed!
           </h1>
           <p className="text-lg text-gray-700 mb-6">
-            Congratulations! You've mastered all the information about HDFC PayZapp!
+            Congratulations! You mastered all the information about HDFC PayZapp!
           </p>
           <button 
             onClick={() => window.location.reload()}
@@ -491,7 +491,16 @@ const App = () => {
 export default App;
 
 
-// import React, { useState, useCallback, useEffect } from "react";
+
+
+
+
+
+
+// version with right and final for looping 
+
+
+// import { useState, useCallback, useEffect } from "react";
 // import yes from "./videos/yes.mp4";
 // import no from "./videos/no.mp4";
 // import jumpingVideo from "./videos/mario.mp4"; // Background video
@@ -721,7 +730,7 @@ export default App;
 //             Quiz Successfully Completed!
 //           </h1>
 //           <p className="text-lg text-gray-700 mb-6">
-//             Congratulations! You've mastered all the information about HDFC PayZapp!
+//             Congratulations! You mastered all the information about HDFC PayZapp!
 //           </p>
 //           <button 
 //             onClick={() => window.location.reload()}

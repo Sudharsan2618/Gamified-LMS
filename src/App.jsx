@@ -390,7 +390,7 @@ const App = () => {
         src={videoSrc}
         autoPlay
         // muted
-        controls  = {videoSrc === "/src/videos/hdfc.mp4"} 
+        controls = {videoSrc.includes("/assets/hdfc")}
 />
 
       </div>

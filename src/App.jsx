@@ -232,10 +232,10 @@
 
 
 import React, { useState, useCallback, useEffect } from "react";
-import yes from "./videos/yes.mp4";
-import no from "./videos/no.mp4";
-import jumpingVideo from "./videos/mario.mp4"; // Background video
-import quizVideo from "./videos/hdfc.mp4"; // First video before quiz
+import yes from "../assets/yes-1.mp4";
+import no from "../assets/no-1.mp4";
+import jumpingVideo from "../assets/mario.mp4"; // Background video
+import quizVideo from "../assets/hdfc.mp4"; // First video before quiz
 
 const questions = [
   {
@@ -390,13 +390,13 @@ const App = () => {
         src={videoSrc}
         autoPlay
         // muted
-        controls = {videoSrc === "/src/videos/hdfc.mp4"} 
+        controls // = {videoSrc === "/src/videos/hdfc.mp4"} 
 />
 
       </div>
 
       {/* Gradient overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-black/30 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-black/30 pointer-events-none hidden"></div>
 
       {/* Header
       <div className="absolute top-0 left-0 w-full p-4 bg-blue-600 bg-opacity-80 text-white z-20">

@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html {
+    @apply text-[70%] sm:text-[75%] md:text-[85%] 2xl:text-[100%];
+    /* @apply text-[65%] sm:text-[70%] md:text-[80%] lg:text-[90%] xl:text-[100%]; */
+}

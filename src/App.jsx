@@ -297,9 +297,106 @@ const speakText = (text) => {
   speechSynthesis.speak(utterance);
 };
 
+// const App = () => {
+//   const [currentQuestion, setCurrentQuestion] = useState(0);
+//   const [videoSrc, setVideoSrc] = useState(quizVideo);
+//   const [showQuestion, setShowQuestion] = useState(false);
+//   const [quizCompleted, setQuizCompleted] = useState(false);
+//   const [playingFeedback, setPlayingFeedback] = useState(false);
+//   const [score, setScore] = useState(0);
+//   const [correctAnswers, setCorrectAnswers] = useState([]);
+//   const [incorrectOption, setIncorrectOption] = useState(null);
+//   const [answeredCorrectly, setAnsweredCorrectly] = useState(Array(questions.length).fill(false));
+
+//   useEffect(() => {
+//     const videoElement = document.getElementById("mainVideo");
+
+//     // Show questions after the quiz intro video
+//     const handleVideoEnd = () => {
+//       if (!playingFeedback) {
+//         setVideoSrc(jumpingVideo); // Start background video
+//         setShowQuestion(true);
+//       } else {
+//         setPlayingFeedback(false);
+//         setVideoSrc(jumpingVideo); // Return to background video
+        
+//         if (incorrectOption) {
+//           // If wrong answer, allow retry (don't advance to next question)
+//           setIncorrectOption(null);
+//         } else {
+//           // If correct answer, advance to next question
+//           if (currentQuestion < questions.length - 1) {
+//             setCurrentQuestion(currentQuestion + 1);
+//           } else {
+//             // Check if all questions are answered correctly
+//             if (answeredCorrectly.every(Boolean)) {
+//               setQuizCompleted(true);
+//               speakText("Congratulations! You've successfully completed the HDFC PayZapp quiz!");
+//             } else {
+//               // Find the first unanswered or incorrect question
+//               const nextQuestionIndex = answeredCorrectly.findIndex(answered => !answered);
+//               if (nextQuestionIndex !== -1) {
+//                 setCurrentQuestion(nextQuestionIndex);
+//               } else {
+//                 // This shouldn't happen, but just in case
+//                 setQuizCompleted(true);
+//               }
+//             }
+//           }
+//         }
+//       }
+//     };
+
+//     videoElement.addEventListener("ended", handleVideoEnd);
+
+//     return () => {
+//       videoElement.removeEventListener("ended", handleVideoEnd);
+//     };
+//   }, [currentQuestion, playingFeedback, incorrectOption, answeredCorrectly]);
+
+//   const handleAnswer = useCallback((option) => {
+//     if (playingFeedback) return; // Prevent answering during feedback video
+    
+//     const correct = option === questions[currentQuestion].answer;
+//     setPlayingFeedback(true);
+    
+//     if (correct) {
+//       // For correct answer
+//       setVideoSrc(yes);
+//       setScore(prevScore => prevScore + 1);
+//       setCorrectAnswers([...correctAnswers, currentQuestion]);
+      
+//       // Mark this question as correctly answered
+//       const updatedAnswers = [...answeredCorrectly];
+//       updatedAnswers[currentQuestion] = true;
+//       setAnsweredCorrectly(updatedAnswers);
+      
+//       speakText("Correct answer!");
+//     } else {
+//       // For incorrect answer
+//       setVideoSrc(no);
+//       setIncorrectOption(option);
+//       speakText("Wrong answer! Try again!");
+//     }
+//   }, [currentQuestion, correctAnswers, answeredCorrectly, playingFeedback]);
+
+//   return (
+//     <div className="relative w-full h-screen overflow-hidden bg-gray-900">
+//       {/* Video container with proper centering */}
+//       <div className="absolute inset-0 flex items-center justify-center bg-black">
+//       <video
+//         id="mainVideo"
+//         className="absolute w-full h-full object-contain max-w-full max-h-full"
+//         src={videoSrc}
+//         loop
+//         autoPlay
+//         // muted
+//         controls = {videoSrc.includes("/assets/hdfc")}
+// />
 const App = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [videoSrc, setVideoSrc] = useState(quizVideo);
+  const [isQuizVideo, setIsQuizVideo] = useState(true); // Tracks if the current video is the quiz video
   const [showQuestion, setShowQuestion] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [playingFeedback, setPlayingFeedback] = useState(false);
@@ -311,34 +408,30 @@ const App = () => {
   useEffect(() => {
     const videoElement = document.getElementById("mainVideo");
 
-    // Show questions after the quiz intro video
     const handleVideoEnd = () => {
       if (!playingFeedback) {
         setVideoSrc(jumpingVideo); // Start background video
+        setIsQuizVideo(false); // Background video is not the quiz video
         setShowQuestion(true);
       } else {
         setPlayingFeedback(false);
         setVideoSrc(jumpingVideo); // Return to background video
-        
+        setIsQuizVideo(false); // Background video is not the quiz video
+
         if (incorrectOption) {
-          // If wrong answer, allow retry (don't advance to next question)
-          setIncorrectOption(null);
+          setIncorrectOption(null); // Retry for incorrect answers
         } else {
-          // If correct answer, advance to next question
           if (currentQuestion < questions.length - 1) {
             setCurrentQuestion(currentQuestion + 1);
           } else {
-            // Check if all questions are answered correctly
             if (answeredCorrectly.every(Boolean)) {
               setQuizCompleted(true);
               speakText("Congratulations! You've successfully completed the HDFC PayZapp quiz!");
             } else {
-              // Find the first unanswered or incorrect question
               const nextQuestionIndex = answeredCorrectly.findIndex(answered => !answered);
               if (nextQuestionIndex !== -1) {
                 setCurrentQuestion(nextQuestionIndex);
               } else {
-                // This shouldn't happen, but just in case
                 setQuizCompleted(true);
               }
             }
@@ -361,20 +454,19 @@ const App = () => {
     setPlayingFeedback(true);
     
     if (correct) {
-      // For correct answer
       setVideoSrc(yes);
+      setIsQuizVideo(false); // Feedback video is not the quiz video
       setScore(prevScore => prevScore + 1);
       setCorrectAnswers([...correctAnswers, currentQuestion]);
-      
-      // Mark this question as correctly answered
+
       const updatedAnswers = [...answeredCorrectly];
       updatedAnswers[currentQuestion] = true;
       setAnsweredCorrectly(updatedAnswers);
-      
+
       speakText("Correct answer!");
     } else {
-      // For incorrect answer
       setVideoSrc(no);
+      setIsQuizVideo(false); // Feedback video is not the quiz video
       setIncorrectOption(option);
       speakText("Wrong answer! Try again!");
     }
@@ -382,17 +474,16 @@ const App = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-gray-900">
-      {/* Video container with proper centering */}
       <div className="absolute inset-0 flex items-center justify-center bg-black">
-      <video
-        id="mainVideo"
-        className="absolute w-full h-full object-contain max-w-full max-h-full"
-        src={videoSrc}
-        autoPlay
-        // muted
-        controls = {videoSrc.includes("/assets/hdfc")}
-/>
-
+        <video
+          id="mainVideo"
+          className="absolute w-full h-full object-contain max-w-full max-h-full"
+          src={videoSrc}
+          loop
+          autoPlay
+          controls={isQuizVideo} // Enable controls only for the quiz video
+          // muted={!isQuizVideo} // Muted for non-quiz videos
+        />
       </div>
 
       {/* Gradient overlay to ensure text readability */}
